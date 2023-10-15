@@ -2,13 +2,7 @@ import java.io.*;
 import java.util.*;
 
 public class TextSwap {
-
-/*    Dear teaching assistant,
-    My name is Yunfei Tang. I think that there is something wrong with the letters.txt.
-    The real number of valid characters should be file.length()-2 since there are both space and newline characters in the file.
-    But I still followed the instruction demonstrated in the code.
-    I set the character number as file.length()-1 and deleted the space character in the letters.txt file.*/
-
+    /* My name is Yunfei Tang. */
     private static String readFile(String filename, int chunkSize) throws Exception {
         String line;
         StringBuilder buffer = new StringBuilder();
@@ -46,7 +40,7 @@ public class TextSwap {
         return labels;
     }
 
-    private static char[] runSwapper(String content, int chunkSize, int numChunks) {
+    private static char[] runSwapper(String content, int chunkSize, int numChunks) throws InterruptedException {
         List<Character> labels = getLabels(numChunks);
         Interval[] intervals = getIntervals(numChunks, chunkSize);
         // TODO: Order the intervals properly, then run the Swapper instances.
@@ -58,6 +52,9 @@ public class TextSwap {
             threadJobs[i] = new Swapper(intervals[order], content, buffer, i * chunkSize);
             threads[i] = new Thread(threadJobs[i]);
             threads[i].start();
+        }
+        for(Thread i : threads){
+            i.join();
         }
         return buffer;
     }
@@ -83,6 +80,7 @@ public class TextSwap {
             File file = new File(args[1]);
             // The "-1" below is because of this:
             // https://stackoverflow.com/questions/729692/why-should-text-files-end-with-a-newline
+            //System.out.println(file.length());
             if ((file.length() - 1) % chunkSize != 0) {
                 throw new Exception("File size must be a multiple of the chunk size");
             }
