@@ -1,0 +1,24 @@
+-module(ex3).
+-compile(export_all).
+-compile(nowarn_export_all).
+
+start()->
+    S=spawn(?MODULE,server,[0]),
+    spawn(?MODULE,client,[50,S]).
+server(State)->
+    receive
+        {continue}->
+            server(State+1);
+        {counter,From}->
+            From!{State},
+            server(0)
+    end.
+client(0,S)->
+    S!{counter,self()},
+    receive
+        {State}->
+            io:format("~w~n",[State])
+    end;
+client(N,S)->
+    S!{continue},
+    client(N-1,S).

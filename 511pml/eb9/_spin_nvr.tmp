@@ -1,0 +1,16 @@
+never ltl_0 {    /* !(([] (<> (csp))) && ([] (<> (csq)))) */
+T0_init:
+	do
+	:: (! ((csq))) -> goto accept_S5
+	:: (! ((csp))) -> goto accept_S10
+	:: (1) -> goto T0_init
+	od;
+accept_S5:
+	do
+	:: (! ((csq))) -> goto accept_S5
+	od;
+accept_S10:
+	do
+	:: (! ((csp))) -> goto accept_S10
+	od;
+}

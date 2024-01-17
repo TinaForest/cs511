@@ -1,0 +1,14 @@
+spin ex.pml
+
+model check
+
+spin -a ex.pml
+gcc -o pan pan.c
+./pan
+./pan -r
+
+jspin verify
+
+// atomic
+// _nr_pr
+// init priority 
